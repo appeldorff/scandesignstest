@@ -1,0 +1,12 @@
+{
+    "name" : "appeldorff/scandesignstest",
+
+    
+    "require": {
+        "php": ">=5.3",
+		"eloquent/pbkdf2-compat" : "1.0.1"
+    },
+    "autoload": {
+        "psr-4": {"Appeldorff\\": "src/"}
+    }
+}
