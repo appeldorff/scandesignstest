@@ -1,7 +1,7 @@
 <?php
 namespace Appeldorff\RPS;
 
-class RpsTournamentImpl// implements RpsTournamentInterface
+class RpsTournament implements RpsTournamentInterface
 {
     const CANCELLED = 'Tournament Cancelled';
     const NOPLAYERS = 'There are no players in the tournament';
@@ -29,7 +29,7 @@ class RpsTournamentImpl// implements RpsTournamentInterface
         }
         $this->players[$name] = strtoupper($throw);
     }
-    
+
     /**
      * Gets the winner of the tournament
      *
@@ -38,6 +38,8 @@ class RpsTournamentImpl// implements RpsTournamentInterface
     public function getWinner() {
         if($this->isCancelled)
             return self::CANCELLED;
+        if(count($this->players) == 0)
+            return self::NOPLAYERS;
         $currentRound = array_keys($this->players);
         $nextRound = array();
         $currentPlayers = null;
