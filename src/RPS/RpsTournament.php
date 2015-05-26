@@ -5,17 +5,18 @@ class RpsTournament implements RpsTournamentInterface
 {
     const CANCELLED = 'Tournament Cancelled';
     const NOPLAYERS = 'There are no players in the tournament';
-    
+
     private $players;
-    private $isCancelled;
-    
-    public function __construct($input = array()) {
+    private $is_cancelled;
+
+    public function __construct($input = array())
+    {
         $players = array();
         foreach ($input as $player => $throw) {
             $this->addPlayer($player,$throw);
         }
     }
-    
+
     /**
      * Adds a player to the tournament
      * @param string $name The name of the playMatch
@@ -23,9 +24,10 @@ class RpsTournament implements RpsTournamentInterface
      *
      * @return void
      */
-    public function addPlayer($name, $throw) {
+    public function addPlayer($name, $throw)
+    {
         if(stripos('RPS',$throw) === false) {
-            $this->isCancelled = true;
+            $this->is_cancelled = true;
         }
         $this->players[$name] = strtoupper($throw);
     }
@@ -35,32 +37,34 @@ class RpsTournament implements RpsTournamentInterface
      *
      * @return string
      */
-    public function getWinner() {
-        if($this->isCancelled)
+    public function getWinner()
+    {
+        if($this->is_cancelled) {
             return self::CANCELLED;
-        if(count($this->players) == 0)
-            return self::NOPLAYERS;
-        $currentRound = array_keys($this->players);
-        $nextRound = array();
-        $currentPlayers = null;
-        while ((count($currentRound) + count($nextRound)) > 1 ) {
-            if(count($currentRound) == 0) {
-                $currentRound = $nextRound;
-                $nextRound = array();
-            }
-            elseif(count($currentRound)==1) {
-                $nextRound[] = array_shift($currentRound);
-                $currentRound = $nextRound;
-                $nextRound = array();
-            }
-            else {
-                $nextRound[] = $this->playMatch(array_shift($currentRound),array_shift($currentRound));
-            }
-            
         }
-        return $nextRound[0];
+        if(count($this->players) == 0) {
+            return self::NOPLAYERS;
+        }
+        $current_round = array_keys($this->players);
+        $next_round = array();
+        while ((count($current_round) + count($next_round)) > 1 ) {
+            if(count($current_round) == 0) {
+                $current_round = $next_round;
+                $next_round = array();
+            } elseif(count($current_round) == 1) {
+                $next_round[] = array_shift($current_round);
+                $current_round = $next_round;
+                $next_round = array();
+            } else {
+                $next_round[] = $this->playMatch(
+                    array_shift($current_round),
+                    array_shift($current_round)
+                );
+            }
+        }
+        return $next_round[0];
     }
-    
+
     /**
      * Gets the winner of a match
      *
@@ -71,29 +75,28 @@ class RpsTournament implements RpsTournamentInterface
     public function playMatch($player1, $player2)
     {
         $opponentThrow = $this->players[$player2];
-        switch($this->players[$player1])
-        {
+        switch($this->players[$player1]) {
             case RPSTournamentInterface::ROCK:
-                if($opponentThrow == RPSTournamentInterface::PAPER)
+                if($opponentThrow == RPSTournamentInterface::PAPER) {
                     return $player2;
-                else
+                } else {
                     return $player1;
-                
+                }
             case RPSTournamentInterface::PAPER:
-                if($opponentThrow == RPSTournamentInterface::SCISSOR)
+                if($opponentThrow == RPSTournamentInterface::SCISSOR) {
                     return $player2;
-                else
+                } else {
                     return $player1;
-
+                }
             case RPSTournamentInterface::SCISSOR:
-                if($opponentThrow == RPSTournamentInterface::ROCK)
+                if($opponentThrow == RPSTournamentInterface::ROCK) {
                     return $player2;
-                else
+                } else {
                     return $player1;
-
+                }
             default:
+                //This case should never be reached. This would indicate invalid values
                 return $player1;
         }
-
     }
 }

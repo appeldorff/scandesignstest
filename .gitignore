@@ -2,6 +2,7 @@
 # with the --copy-libstdcxx option, so never include them
 # in our git repository.
 *.phar
+*.sqlite
 composer.lock
 vendor/*
 *php~
